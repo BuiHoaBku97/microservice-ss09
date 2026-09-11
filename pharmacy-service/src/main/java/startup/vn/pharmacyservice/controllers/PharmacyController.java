@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import startup.vn.pharmacyservice.clients.WarehouseClientService;
+import startup.vn.pharmacyservice.clients.WarehouseClient;
 
 @RestController
 @RequestMapping("/api/v1/pharmacies")
@@ -19,16 +19,15 @@ public class PharmacyController {
     @Value("${app.hotline}")
     private String hotline;
 
-    private final WarehouseClientService warehouseClientService;
+    private final WarehouseClient warehouseClient;
 
     @GetMapping("/hello")
     public String hello() {
         return String.format("Hello from %s Pharmacy! For assistance, call us at %s.", branchName, hotline);
     }
 
-    // Example endpoint that calls the warehouse service with circuit breaker
     @GetMapping("/stock/{productId}")
     public String checkStock(@PathVariable String productId) {
-        return warehouseClientService.checkStock(productId);
+        return warehouseClient.getStock(productId);
     }
 }
